@@ -90,8 +90,12 @@ def draw():
     ball.draw()
     for obstacle in obstacles:
         obstacle.draw()
+    for heart in hearts:
+        heart.draw()
+
 
 def update():
+    global game_status,lives
     paddle.update()
     ball.update()
 
@@ -102,6 +106,28 @@ def update():
         if ball.ball.colliderect(obstacle):
             ball.speed_y *= -1
             obstacles.remove(obstacle)
+
+    if ball.ball.y >= HEIGHT:
+        lives -= 1
+        ball.ball.x = 400
+        ball.ball.y = 300
+        ball.speed_x = 2
+        ball.speed_y = -2
+        hearts.pop()
+
+    if lives == 0:
+        game_status = 0
+        obstacles.clear()
+    if not obstacles and game_status != 0:
+        game_status = 2
+
+lives = 3
+hearts = []
+for i in range(lives):
+    heart = Actor('heart.png')
+    heart.x = 30 + i * 50
+    heart.y = 25
+    hearts.append(heart)
 
 game_status = 1
 paddle = Paddle(250, 450, 'paddle.png')
