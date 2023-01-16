@@ -58,23 +58,56 @@ class Obstacle:
     def draw(self):
         self.obstacle.draw()
 
+def draw_obs(obstacles):
+    for i in range(6):
+        x = 100 + i * 120
+        y = 75
+        obstacle = Obstacle(x,y,sprites[2],3)
+        obstacles.append(obstacle.obstacle)
+
+    for i in range(6):
+        x = 100 + i * 120
+        y = 125
+        obstacle = Obstacle(x,y,sprites[2],3)
+        obstacles.append(obstacle.obstacle)
+
+    for i in range(6):
+        x = 100 + i * 120
+        y = 175
+        obstacle = Obstacle(x,y,sprites[1],2)
+        obstacles.append(obstacle.obstacle)
+
+    for i in range(6):
+        x = 100 + i * 120
+        y = 225
+        obstacle = Obstacle(x,y,sprites[0],1)
+        obstacles.append(obstacle.obstacle)
 
 def draw():
     global game_status
     screen.blit("background.jpeg", (0,0))
     paddle.draw()
     ball.draw()
-#   for obstacle in obstacles:
-#       obstacle.draw()
+    for obstacle in obstacles:
+        obstacle.draw()
 
 def update():
     paddle.update()
     ball.update()
+
+    if paddle.paddle.colliderect(ball.ball):
+        ball.speed_y *= -1
+
+    for obstacle in obstacles:
+        if ball.ball.colliderect(obstacle):
+            ball.speed_y *= -1
+            obstacles.remove(obstacle)
 
 game_status = 1
 paddle = Paddle(250, 450, 'paddle.png')
 ball = Ball(300, 400, 'ball.png', 2, -2)
 obstacles = []
 sprites = ["greenwall.png","yellowwall.png","redwall.png"]
+draw_obs(obstacles)
 
 pgzrun.go()
