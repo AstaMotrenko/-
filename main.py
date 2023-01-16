@@ -22,6 +22,7 @@ class Paddle:
         else:
             self.paddle.x = 1000
 
+
 class Ball:
     def __init__(self, x, y, sprite, speed_x, speed_y):
         self.x = x
@@ -58,6 +59,7 @@ class Obstacle:
     def draw(self):
         self.obstacle.draw()
 
+
 def draw_obs(obstacles):
     for i in range(6):
         x = 100 + i * 120
@@ -83,6 +85,7 @@ def draw_obs(obstacles):
         obstacle = Obstacle(x,y,sprites[0],1)
         obstacles.append(obstacle.obstacle)
 
+
 def draw():
     global game_status
     screen.blit("background.jpeg", (0,0))
@@ -92,10 +95,12 @@ def draw():
         obstacle.draw()
     for heart in hearts:
         heart.draw()
+    if game_status == 0: screen.blit('gameover.png', (0,0))
+    if game_status == 2: screen.blit('win.png', (0,0))
 
 
 def update():
-    global game_status,lives
+    global lives, game_status
     paddle.update()
     ball.update()
 
@@ -106,6 +111,9 @@ def update():
         if ball.ball.colliderect(obstacle):
             ball.speed_y *= -1
             obstacles.remove(obstacle)
+#            obstacle.obstacle.hits_to_destroy -= 1
+#            if obstacle.obstacle.hits_to_destroy == 0: obstacles.remove(obstacle)
+
 
     if ball.ball.y >= HEIGHT:
         lives -= 1
@@ -121,6 +129,7 @@ def update():
     if not obstacles and game_status != 0:
         game_status = 2
 
+
 lives = 3
 hearts = []
 for i in range(lives):
@@ -135,5 +144,6 @@ ball = Ball(300, 400, 'ball.png', 2, -2)
 obstacles = []
 sprites = ["greenwall.png","yellowwall.png","redwall.png"]
 draw_obs(obstacles)
+
 
 pgzrun.go()
